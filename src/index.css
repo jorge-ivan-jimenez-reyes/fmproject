@@ -1,0 +1,141 @@
+/* Importando fuente */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* Importando Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+@layer utilities {
+  .bg-sidebar-background {
+    background-color: var(--sidebar-background);
+  }
+  .bg-content-background {
+    background-color: var(--content-background);
+  }
+}
+
+:root {
+  --nav-link-color: #a6a6a6;
+  --nav-link-hover-color: #555;
+  --sidebar-background: #fff; /* Color de fondo del sidebar */
+  --active-link-color: #9ac0de; /* Color del enlace activo */
+  --content-background: #cccccc; /* Color del contenido más oscuro */
+}
+
+body,
+html {
+  @apply m-0 p-0 h-full;
+}
+
+.flex-container {
+  @apply flex min-h-screen; /* Altura completa de la ventana */
+}
+
+.sidebar {
+  @apply w-64 flex-shrink-0 bg-sidebar-background; /* Ancho fijo para el sidebar */
+}
+
+.main-content {
+  @apply flex-grow bg-content-background p-5; /* Ocupa el espacio restante */
+}
+
+.customNav {
+  @apply flex flex-col justify-between h-screen w-64 shadow-lg bg-sidebar-background;
+}
+
+.navItemsContainer {
+  @apply flex flex-col items-start py-5 overflow-y-auto h-full;
+}
+
+.navLink {
+  @apply flex items-center w-full py-3 px-5 no-underline transition duration-300;
+  color: var(--nav-link-color);
+}
+
+.navLink:hover,
+.navLink.active {
+  @apply bg-gray-200;
+}
+
+.navLink .icon {
+  @apply mr-5;
+  color: var(--nav-link-color);
+}
+
+.text-3xl {
+  @apply text-2xl mb-3;
+}
+
+.ios {
+  @apply w-24 mb-5;
+}
+
+.bottomLogo {
+  @apply flex justify-center items-center py-5 border-t border-gray-300;
+}
+
+.hidden {
+  display: none; /* Utiliza esta línea directamente en lugar de @apply hidden */
+}
+
+/* Estilos para el horario */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(
+    8,
+    1fr
+  ); /* Ajuste aquí para incluir el índice */
+  gap: 0.25rem; /* Ajustar el espacio entre celdas */
+}
+
+.index {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #000;
+  height: 2rem;
+  background-color: #f8f9fa;
+}
+
+.gridCellWhite {
+  background-color: #fef6f6;
+  cursor: pointer;
+  height: 2rem;
+  transition: background-color 0.2s ease;
+}
+
+.gridCellWhite:hover {
+  background-color: #f1f1f1;
+}
+
+.gridCellGreen {
+  background-color: #cceaa0;
+  cursor: pointer;
+  height: 2rem;
+  transition: background-color 0.2s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fafbfd;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
