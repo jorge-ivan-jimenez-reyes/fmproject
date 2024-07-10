@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import './index.css';
 
 const App = () => {
@@ -18,6 +20,8 @@ const App = () => {
             <Route path="/cart" element={<div>Cart</div>} />
             <Route path="/saved" element={<div>Saved</div>} />
             <Route path="/setting" element={<div>Setting</div>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </div>
       </div>
