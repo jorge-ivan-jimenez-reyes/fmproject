@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Table from '../components/Table';
+import Header from '../components/Header';
 import { FaClipboardList, FaHourglassHalf, FaTimesCircle, FaCheckCircle } from 'react-icons/fa';
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
+  const [filteredPedidos, setFilteredPedidos] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('access_token'); // Correcto nombre de la key
@@ -19,6 +21,7 @@ const Pedidos = () => {
           },
         });
         setPedidos(response.data);
+        setFilteredPedidos(response.data);
       } catch (error) {
         setError('Error fetching pedidos data');
       } finally {
@@ -29,6 +32,34 @@ const Pedidos = () => {
     fetchPedidos();
   }, [token]);
 
+  const handleSearch = (searchTerm) => {
+    if (!searchTerm) {
+      setFilteredPedidos(pedidos);
+      return;
+    }
+    const filtered = pedidos.filter((pedido) =>
+      Object.values(pedido).some((val) =>
+        String(val).toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    setFilteredPedidos(filtered);
+  };
+
+  const handleFilter = (field, value) => {
+    if (!field || !value) {
+      setFilteredPedidos(pedidos);
+      return;
+    }
+    const filtered = pedidos.filter((pedido) =>
+      String(pedido[field]).toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredPedidos(filtered);
+  };
+
+  const handleView = (viewOption) => {
+    // Implementar lógica de cambio de vista
+  };
+
   const handleStatusChange = async (id, newStatus) => {
     try {
       await axios.put(`http://corte.fymmx.com/plantillas/changeStatus?IDpedido=${id}&status=${newStatus}`, {}, {
@@ -37,6 +68,11 @@ const Pedidos = () => {
         },
       });
       setPedidos(prevPedidos =>
+        prevPedidos.map(pedido =>
+          pedido.IDpedido === id ? { ...pedido, status: newStatus } : pedido
+        )
+      );
+      setFilteredPedidos(prevPedidos =>
         prevPedidos.map(pedido =>
           pedido.IDpedido === id ? { ...pedido, status: newStatus } : pedido
         )
@@ -52,10 +88,11 @@ const Pedidos = () => {
     "Incluye Tope", "Cantidad Topes", "Fecha Solicitud", "Status"
   ];
 
-  const countByStatus = (status) => pedidos.filter(pedido => pedido.status === status).length;
+  const countByStatus = (status) => filteredPedidos.filter(pedido => pedido.status === status).length;
 
   return (
     <div className="p-4">
+      <Header handleSearch={handleSearch} handleFilter={handleFilter} handleView={handleView} />
       <h1 className="text-2xl font-bold mb-4 text-gray-800">Pedidos</h1>
       {loading ? (
         <div className="loader-container">
@@ -70,7 +107,7 @@ const Pedidos = () => {
               <FaClipboardList className="text-3xl mr-4 icon" />
               <div>
                 <h2 className="text-xl">Total Pedidos</h2>
-                <p className="text-3xl font-bold">{pedidos.length}</p>
+                <p className="text-3xl font-bold">{filteredPedidos.length}</p>
               </div>
             </div>
             <div className="card bg-yellow-500 text-white p-4 rounded shadow-md flex items-center">
@@ -95,7 +132,7 @@ const Pedidos = () => {
               </div>
             </div>
           </div>
-          <Table headers={headers} data={pedidos} handleStatusChange={handleStatusChange} />
+          <Table headers={headers} data={filteredPedidos} handleStatusChange={handleStatusChange} />
         </div>
       )}
     </div>
