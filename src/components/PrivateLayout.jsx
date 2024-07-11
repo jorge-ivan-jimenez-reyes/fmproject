@@ -1,11 +1,11 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 
-const PrivateLayout = ({ children, username }) => {
+const PrivateLayout = ({ username, children }) => {
   return (
-    <div className="flex-container">
+    <div className="flex">
       <Sidebar username={username} />
-      <div className="main-content">
+      <div className="flex-grow p-4">
         {children}
       </div>
     </div>
