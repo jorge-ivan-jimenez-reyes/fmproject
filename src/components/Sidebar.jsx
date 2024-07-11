@@ -5,18 +5,19 @@ import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ username }) => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   const menus = [
-    { name: "dashboard", link: "/", icon: MdOutlineDashboard },
-    { name: "user", link: "/user", icon: AiOutlineUser },
-    { name: "messages", link: "/messages", icon: FiMessageSquare },
-    { name: "analytics", link: "/analytics", icon: TbReportAnalytics, margin: true },
-    { name: "File Manager", link: "/file-manager", icon: FiFolder },
-    { name: "Cart", link: "/cart", icon: FiShoppingCart },
-    { name: "Saved", link: "/saved", icon: AiOutlineHeart, margin: true },
-    { name: "Setting", link: "/setting", icon: RiSettings4Line },
+    { name: "Pedidos", link: "/", icon: FiShoppingCart },
+    { name: username, link: "/usuario", icon: AiOutlineUser },
+    { name: "Cerrar sesión", link: "#", icon: RiSettings4Line, action: handleLogout },
   ];
   const [open, setOpen] = useState(true);
   return (
@@ -37,6 +38,7 @@ const Sidebar = () => {
           <Link
             to={menu?.link}
             key={i}
+            onClick={menu.action ? menu.action : undefined}
             className={` ${
               menu?.margin && "mt-5"
             } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md`}
