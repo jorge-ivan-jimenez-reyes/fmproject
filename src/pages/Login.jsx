@@ -5,8 +5,8 @@ import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import fondoLogin from '../assets/images/Fondo_Login.jpg';
 import logo from '../assets/images/logoazulnegro.jpg';
 
-const Login = () => {
-  const [username, setUsername] = useState('');
+const Login = ({ setUsername }) => {
+  const [username, setUsernameState] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,6 +20,8 @@ const Login = () => {
     try {
       const response = await axios.post('http://corte.fymmx.com/token/', { username, email, password });
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', username); // Guardar el username en el localStorage
+      setUsername(username); // Actualizar el estado del username
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);
@@ -53,7 +55,7 @@ const Login = () => {
               type="text"
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsernameState(e.target.value)}
               className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
