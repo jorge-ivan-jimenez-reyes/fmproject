@@ -2,8 +2,8 @@ import React from 'react';
 
 const Usuario = ({ username }) => {
   return (
-    <div>
-      <h1>Usuario: {username}</h1>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Usuario: {username}</h1>
     </div>
   );
 };

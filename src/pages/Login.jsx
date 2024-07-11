@@ -21,8 +21,8 @@ const Login = ({ setUsername }) => {
       const response = await axios.post('http://corte.fymmx.com/token/', { username, email, password });
       console.log('Response:', response.data); // Verificar la respuesta completa
       localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('username', email); // Guardar el email en el localStorage
-      setUsername(email); // Actualizar el estado del username
+      localStorage.setItem('username', username); // Guardar el username en el localStorage
+      setUsername(username); // Actualizar el estado del username
       console.log('Token saved in localStorage:', localStorage.getItem('access_token'));
       navigate('/');
     } catch (error) {
