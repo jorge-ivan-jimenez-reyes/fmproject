@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import fondoLogin from '../assets/images/Fondo_Login.jpg';
 import logo from '../assets/images/logoazulnegro.jpg';
 
@@ -36,37 +37,45 @@ const Register = () => {
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${fondoLogin})` }}
     >
+      {loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       <div className="bg-gray-800 bg-opacity-75 p-8 rounded-lg shadow-lg w-full max-w-md">
         <img src={logo} alt="Logo" className="mx-auto mb-4 w-32 h-32" />
         <h1 className="mb-8 text-3xl text-white text-center">Register</h1>
         <form onSubmit={handleRegister} className="w-full">
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-white">Username</label>
+          <div className="mb-4 flex items-center bg-gray-700 p-2 rounded">
+            <FaUser className="text-white mr-3" />
             <input
               type="text"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-white">Email</label>
+          <div className="mb-4 flex items-center bg-gray-700 p-2 rounded">
+            <FaEnvelope className="text-white mr-3" />
             <input
               type="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
-          <div className="mb-6">
-            <label className="block mb-2 text-sm font-bold text-white">Password</label>
+          <div className="mb-6 flex items-center bg-gray-700 p-2 rounded">
+            <FaLock className="text-white mr-3" />
             <input
               type="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
@@ -77,14 +86,9 @@ const Register = () => {
               className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline w-full"
               disabled={loading}
             >
-              {loading ? 'Loading...' : 'Register'}
+              Register
             </button>
           </div>
-          {loading && (
-            <div className="mt-4">
-              <div className="loader">Loading...</div>
-            </div>
-          )}
         </form>
       </div>
     </div>
