@@ -1,7 +1,8 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 
-const PrivateLayout = ({ children, username }) => {
+const PrivateLayout = ({ children }) => {
+  const username = localStorage.getItem('username');
   return (
     <div className="flex">
       <Sidebar username={username} />

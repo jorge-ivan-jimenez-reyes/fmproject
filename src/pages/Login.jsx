@@ -6,7 +6,7 @@ import fondoLogin from '../assets/images/Fondo_Login.jpg';
 import logo from '../assets/images/logoazulnegro.jpg';
 
 const Login = ({ setUsername }) => {
-  const [username, setUsernameState] = useState('');
+  const [username, setLocalUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,18 +19,15 @@ const Login = ({ setUsername }) => {
     setError('');
     try {
       const response = await axios.post('http://corte.fymmx.com/token/', { username, email, password });
-      console.log('Response:', response.data); // Verificar la respuesta completa
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('username', username); // Guardar el username en el localStorage
-      setUsername(username); // Actualizar el estado del username
-      console.log('Token saved in localStorage:', localStorage.getItem('access_token'));
-      navigate('/');
+      const token = response.data.access_token;
+      localStorage.setItem('access_token', token);
+      localStorage.setItem('username', username);
+      setUsername(username);
+      navigate('/'); // Redirigir a la página principal
     } catch (error) {
-      console.error('Login error:', error); // Mostrar el error completo
+      console.error('Login error:', error);
       if (error.response && error.response.data && error.response.data.detail) {
         setError(error.response.data.detail);
-      } else if (error.response && error.response.data) {
-        setError(JSON.stringify(error.response.data));
       } else {
         setError('An unexpected error occurred. Please try again.');
       }
@@ -40,58 +37,62 @@ const Login = ({ setUsername }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${fondoLogin})` }}>
-      <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-96 relative">
+    <div
+      className="flex items-center justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${fondoLogin})` }}
+    >
+      {loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
+      <div className="bg-gray-800 bg-opacity-75 p-8 rounded-lg shadow-lg w-full max-w-md">
         <img src={logo} alt="Logo" className="mx-auto mb-4 w-32 h-32" />
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4 relative">
-            <FaUser className="absolute left-3 top-3 text-gray-500" />
+        <h1 className="mb-8 text-3xl text-white text-center">Login</h1>
+        <form onSubmit={handleLogin} className="w-full">
+          <div className="mb-4 flex items-center bg-gray-700 p-2 rounded">
+            <FaUser className="text-white mr-3" />
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsernameState(e.target.value)}
-              className="w-full p-2 pl-10 border border-gray-300 rounded mt-1"
               placeholder="Username"
+              value={username}
+              onChange={(e) => setLocalUsername(e.target.value)}
+              className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
-          <div className="mb-4 relative">
-            <FaEnvelope className="absolute left-3 top-3 text-gray-500" />
+          <div className="mb-4 flex items-center bg-gray-700 p-2 rounded">
+            <FaEnvelope className="text-white mr-3" />
             <input
               type="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 pl-10 border border-gray-300 rounded mt-1"
-              placeholder="Email"
+              className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
-          <div className="mb-4 relative">
-            <FaLock className="absolute left-3 top-3 text-gray-500" />
+          <div className="mb-6 flex items-center bg-gray-700 p-2 rounded">
+            <FaLock className="text-white mr-3" />
             <input
               type="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 pl-10 border border-gray-300 rounded mt-1"
-              placeholder="Password"
+              className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
-          {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded mt-4"
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="flex justify-center items-center">
-                <div className="loader"></div> Loading...
-              </div>
-            ) : (
-              'Login'
-            )}
-          </button>
+          {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline w-full"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Login'}
+            </button>
+          </div>
         </form>
       </div>
     </div>
