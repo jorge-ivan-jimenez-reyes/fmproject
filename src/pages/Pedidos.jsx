@@ -53,7 +53,7 @@ const Pedidos = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-white">Pedidos</h1>
+      <h1 className="text-2xl font-bold mb-4 text-gray-800">Pedidos</h1>
       {loading ? (
         <div className="loader-container">
           <div className="loader"></div>
@@ -63,7 +63,7 @@ const Pedidos = () => {
       ) : (
         <div>
           <div className="mb-4 flex justify-between">
-            <div className="card">
+            <div className="card bg-white p-4 rounded shadow-md">
               <h2 className="text-xl">Total Pedidos</h2>
               <p className="text-2xl">{pedidos.length}</p>
             </div>

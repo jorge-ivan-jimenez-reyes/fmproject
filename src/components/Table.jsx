@@ -3,8 +3,8 @@ import React from 'react';
 const Table = ({ headers, data, handleStatusChange }) => {
   return (
     <div className="overflow-auto">
-      <table className="min-w-full bg-gray-800">
-        <thead className="table-header">
+      <table className="min-w-full bg-white shadow-md rounded-lg">
+        <thead className="bg-gray-800 text-white">
           <tr>
             {headers.map((header, index) => (
               <th key={index} className="px-4 py-2">{header}</th>
