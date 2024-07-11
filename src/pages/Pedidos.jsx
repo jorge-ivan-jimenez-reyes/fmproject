@@ -1,67 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('access_token');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPedidos = async () => {
+      setLoading(true);
       try {
-        const token = localStorage.getItem('access_token');
-        console.log('Token used for request:', token);  // Verificar el token en la consola
-        if (!token) {
-          setError('No token found. Please log in again.');
-          setLoading(false);
-          return;
-        }
-
         const response = await axios.get('http://corte.fymmx.com/plantillas/getData', {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
-
-        console.log('Response data:', response.data); // Verificar los datos de la respuesta
-
-        if (response.status === 200) {
-          setPedidos(response.data);
-        } else {
-          setError('Failed to fetch pedidos data. Please try again later.');
-        }
+        setPedidos(response.data);
       } catch (error) {
-        console.error('Fetch error:', error); // Mostrar el error completo
-        if (error.response) {
-          setError(`Error: ${error.response.status} - ${error.response.data}`);
-        } else if (error.request) {
-          setError('No response received from the server. Please try again later.');
-        } else {
-          setError(`Error: ${error.message}`);
-        }
+        setError('Error fetching pedidos data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchPedidos();
+  }, [token]);
 
-  const handleStatusChange = async (id, status) => {
+  const handleStatusChange = async (id, newStatus) => {
     try {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        setError('No token found. Please log in again.');
-        return;
-      }
-
-      await axios.put(`http://corte.fymmx.com/plantillas/changeStatus?IDpedido=${id}&status=${status}`, {}, {
+      await axios.put(`http://corte.fymmx.com/plantillas/changeStatus?IDpedido=${id}&status=${newStatus}`, {}, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-
-      setPedidos((prev) => prev.map(pedido => pedido.id === id ? { ...pedido, status } : pedido));
+      setPedidos(prevPedidos =>
+        prevPedidos.map(pedido =>
+          pedido.IDpedido === id ? { ...pedido, status: newStatus } : pedido
+        )
+      );
     } catch (error) {
       console.error('Error updating status:', error);
     }
@@ -69,6 +46,7 @@ const Pedidos = () => {
 
   return (
     <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4 text-white">Pedidos</h1>
       {loading ? (
         <div className="loader-container">
           <div className="loader"></div>
@@ -76,47 +54,70 @@ const Pedidos = () => {
       ) : error ? (
         <div className="text-red-500">{error}</div>
       ) : (
-        <>
+        <div>
           <div className="mb-4 flex justify-between">
-            <div className="text-lg font-bold">Total de Pedidos: {pedidos.length}</div>
+            <div className="card">
+              <h2 className="text-xl">Total Pedidos</h2>
+              <p className="text-2xl">{pedidos.length}</p>
+            </div>
           </div>
           <div className="overflow-auto">
-            <table className="min-w-full bg-white">
-              <thead>
+            <table className="min-w-full bg-gray-800">
+              <thead className="table-header">
                 <tr>
-                  <th className="px-4 py-2">ID</th>
-                  <th className="px-4 py-2">Nombre</th>
-                  <th className="px-4 py-2">Descripción</th>
+                  <th className="px-4 py-2">ID Pedido</th>
+                  <th className="px-4 py-2">Correo Solicitante</th>
+                  <th className="px-4 py-2">Fecha Entrega</th>
+                  <th className="px-4 py-2">Planta Destino</th>
+                  <th className="px-4 py-2">Numero Piezas</th>
+                  <th className="px-4 py-2">Tiene Orden</th>
+                  <th className="px-4 py-2">Orden Compra</th>
+                  <th className="px-4 py-2">Material</th>
+                  <th className="px-4 py-2">Espesor</th>
+                  <th className="px-4 py-2">Alto</th>
+                  <th className="px-4 py-2">Largo</th>
+                  <th className="px-4 py-2">Nombre Archivo</th>
+                  <th className="px-4 py-2">Incluye Tope</th>
+                  <th className="px-4 py-2">Cantidad Topes</th>
+                  <th className="px-4 py-2">Fecha Solicitud</th>
                   <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {pedidos.map((pedido) => (
-                  <tr key={pedido.id} className={`bg-${pedido.status === 'Completado' ? 'green-200' : pedido.status === 'Rechazado' ? 'red-200' : 'yellow-200'}`}>
-                    <td className="border px-4 py-2">{pedido.id}</td>
-                    <td className="border px-4 py-2">{pedido.nombre}</td>
-                    <td className="border px-4 py-2">{pedido.descripcion}</td>
+                  <tr key={pedido.IDpedido} className={`table-row status-${pedido.status.replace(' ', '-').toLowerCase()}`}>
+                    <td className="border px-4 py-2">{pedido.IDpedido}</td>
+                    <td className="border px-4 py-2">{pedido.CorreoSolicitante}</td>
+                    <td className="border px-4 py-2">{pedido.FechaEntrega}</td>
+                    <td className="border px-4 py-2">{pedido.PlantaDestino}</td>
+                    <td className="border px-4 py-2">{pedido.NumeroPiezas}</td>
+                    <td className="border px-4 py-2">{pedido.TieneOrden ? 'Yes' : 'No'}</td>
+                    <td className="border px-4 py-2">{pedido.OrdenCompra}</td>
+                    <td className="border px-4 py-2">{pedido.Material}</td>
+                    <td className="border px-4 py-2">{pedido.Espesor}</td>
+                    <td className="border px-4 py-2">{pedido.Alto}</td>
+                    <td className="border px-4 py-2">{pedido.Largo}</td>
+                    <td className="border px-4 py-2">{pedido.NombreArchivo}</td>
+                    <td className="border px-4 py-2">{pedido.IncluyeTope ? 'Yes' : 'No'}</td>
+                    <td className="border px-4 py-2">{pedido.CantidadTopes}</td>
+                    <td className="border px-4 py-2">{pedido.FechaSolicitud}</td>
                     <td className="border px-4 py-2">
                       <select
                         value={pedido.status}
-                        onChange={(e) => handleStatusChange(pedido.id, e.target.value)}
-                        className="bg-white border rounded px-2 py-1"
+                        onChange={(e) => handleStatusChange(pedido.IDpedido, e.target.value)}
+                        className="bg-gray-200 p-2 rounded"
                       >
                         <option value="En espera">En espera</option>
                         <option value="Completado">Completado</option>
                         <option value="Rechazado">Rechazado</option>
                       </select>
                     </td>
-                    <td className="border px-4 py-2">
-                      <button onClick={() => handleStatusChange(pedido.id, 'Rechazado')} className="bg-red-500 text-white px-4 py-2 rounded">Rechazar</button>
-                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

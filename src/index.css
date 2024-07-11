@@ -19,9 +19,13 @@
 :root {
   --nav-link-color: #a6a6a6;
   --nav-link-hover-color: #555;
-  --sidebar-background: #fff; /* Color de fondo del sidebar */
+  --sidebar-background: #1f1f1f; /* Color de fondo del sidebar */
   --active-link-color: #9ac0de; /* Color del enlace activo */
-  --content-background: #ffffff; /* Color de fondo del contenido */
+  --content-background: #f5f5f5; /* Color de fondo del contenido */
+  --table-header-bg: #333333; /* Color de fondo de la cabecera de la tabla */
+  --table-row-hover-bg: #444444; /* Color de fondo al pasar el ratón sobre una fila de la tabla */
+  --table-row-bg: #2b2b2b; /* Color de fondo de las filas de la tabla */
+  --card-bg: #4a4a4a; /* Color de fondo de las tarjetas */
 }
 
 body,
@@ -34,7 +38,7 @@ html {
 }
 
 .sidebar {
-  @apply w-64 flex-shrink-0 bg-sidebar-background; /* Ancho fijo para el sidebar */
+  @apply w-64 flex-shrink-0 bg-sidebar-background text-white; /* Ancho fijo para el sidebar */
 }
 
 .main-content {
@@ -50,13 +54,13 @@ html {
 }
 
 .navLink {
-  @apply flex items-center w-full py-3 px-5 no-underline transition duration-300;
+  @apply flex items-center w-full py-3 px-5 no-underline transition duration-300 text-white;
   color: var(--nav-link-color);
 }
 
 .navLink:hover,
 .navLink.active {
-  @apply bg-gray-200;
+  @apply bg-gray-800;
 }
 
 .navLink .icon {
@@ -73,7 +77,7 @@ html {
 }
 
 .bottomLogo {
-  @apply flex justify-center items-center py-5 border-t border-gray-300;
+  @apply flex justify-center items-center py-5 border-t border-gray-600;
 }
 
 .hidden {
@@ -96,9 +100,9 @@ html {
   align-items: center;
   font-size: 13px;
   font-weight: 500;
-  color: #000;
+  color: #fff;
   height: 2rem;
-  background-color: #f8f9fa;
+  background-color: var(--table-header-bg);
 }
 
 .gridCellWhite {
@@ -125,7 +129,7 @@ body {
   font-family: "Poppins", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fafbfd;
+  background-color: #1e1e1e;
 }
 
 code {
@@ -141,17 +145,15 @@ body,
 }
 
 .loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @apply fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50;
 }
 
 .loader {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #3498db;
   animation: spin 1s ease infinite;
 }
 
@@ -162,4 +164,45 @@ body,
   100% {
     transform: rotate(360deg);
   }
+}
+
+.table-header {
+  background-color: var(--table-header-bg);
+  color: #fff;
+}
+
+.table-row {
+  background-color: var(--table-row-bg);
+  &:hover {
+    background-color: var(--table-row-hover-bg);
+  }
+}
+
+.status-en-espera {
+  background-color: #ffeb3b;
+}
+
+.status-completado {
+  background-color: #4caf50;
+}
+
+.status-rechazado {
+  background-color: #f44336;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 24px;
 }
