@@ -58,15 +58,27 @@ npm run build
 
 The optimized files will be in the `build` folder.
 
-## Usage
+Using Docker
+Building the Docker Image
+Make sure Docker is running on your system.
+Build the Docker image by running the following command in the root of the project directory:
+bash
+Copiar código
+docker build -t nombre-del-contenedor .
+Running the Docker Container
+Once the image is built, you can run it using the following command:
 
-1. Register or log in to access the application.
-2. Use the search bar to find specific orders.
-3. Use the "Filter" button to filter orders by various fields.
-4. Use the "View" button to change the table view by order status.
+bash
+Copiar código
+docker run -p 3000:80 nombre-del-contenedor
+Open your browser and navigate to http://localhost:3000 to access the application.
 
-## Project Structure
-
+Usage
+Register or log in to access the application.
+Use the search bar to find specific orders.
+Use the "Filter" button to filter orders by various fields.
+Use the "View" button to change the table view by order status.
+Project Structure
 - `src/`: Main source code directory.
   - `components/`: Reusable components.
     - `Header.jsx`: Header component with search bar, filter, and view buttons.
@@ -80,6 +92,14 @@ The optimized files will be in the `build` folder.
 - `public/`: Public and static files.
 - `README.md`: This file.
 
+
+
+Contributing
+Fork the repository.
+Create a new branch (git checkout -b feature/new-feature).
+Make your changes and commit them with descriptive messages (git commit -am 'Add new feature').
+Push your changes to the remote repository (git push origin feature/new-feature).
+Open a Pull Request.
 
 
 1. Fork the repository.
