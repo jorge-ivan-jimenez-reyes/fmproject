@@ -9,14 +9,13 @@ const Pedidos = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
+        console.log('Token used for request:', token);  // Verificar el token en la consola
         if (!token) {
           setError('No token found. Please log in again.');
           setLoading(false);
           return;
         }
-
-        console.log('Token used for request:', token);  // Añadir esto para verificar el token
 
         const response = await axios.get('http://corte.fymmx.com/plantillas/getData', {
           headers: {
@@ -24,12 +23,15 @@ const Pedidos = () => {
           }
         });
 
+        console.log('Response data:', response.data); // Verificar los datos de la respuesta
+
         if (response.status === 200) {
           setPedidos(response.data);
         } else {
           setError('Failed to fetch pedidos data. Please try again later.');
         }
       } catch (error) {
+        console.error('Fetch error:', error); // Mostrar el error completo
         if (error.response) {
           setError(`Error: ${error.response.status} - ${error.response.data}`);
         } else if (error.request) {
@@ -47,7 +49,7 @@ const Pedidos = () => {
 
   const handleStatusChange = async (id, status) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) {
         setError('No token found. Please log in again.');
         return;

@@ -38,11 +38,11 @@ const Register = () => {
       style={{ backgroundImage: `url(${fondoLogin})` }}
     >
       {loading && (
-        <div className="loader-container">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="loader"></div>
         </div>
       )}
-      <div className="bg-gray-800 bg-opacity-75 p-8 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-gray-800 bg-opacity-75 p-8 rounded-lg shadow-lg w-full max-w-md relative">
         <img src={logo} alt="Logo" className="mx-auto mb-4 w-32 h-32" />
         <h1 className="mb-8 text-3xl text-white text-center">Register</h1>
         <form onSubmit={handleRegister} className="w-full">
