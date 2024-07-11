@@ -9,17 +9,23 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
     try {
       await axios.post('http://corte.fymmx.com/register/', { username, email, password });
       navigate('/login');
     } catch (error) {
       console.error('Register error:', error);
-      console.log('Error details:', error.response.data);
+      if (error.response && error.response.data && error.response.data.detail) {
+        setError(error.response.data.detail);
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -64,6 +70,7 @@ const Register = () => {
               required
             />
           </div>
+          {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
           <div className="flex items-center justify-between">
             <button
               type="submit"
