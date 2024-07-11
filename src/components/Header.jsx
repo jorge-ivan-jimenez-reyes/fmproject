@@ -6,6 +6,7 @@ const Header = ({ handleSearch, handleFilter, handleView }) => {
   const [viewOpen, setViewOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('');
   const [filterValue, setFilterValue] = useState('');
+  const [selectedViews, setSelectedViews] = useState([]);
 
   const toggleFilter = () => setFilterOpen(!filterOpen);
   const toggleView = () => setViewOpen(!viewOpen);
@@ -13,6 +14,21 @@ const Header = ({ handleSearch, handleFilter, handleView }) => {
   const applyFilter = () => {
     handleFilter(selectedFilter, filterValue);
     setFilterOpen(false);
+  };
+
+  const handleViewChange = (status) => {
+    setSelectedViews((prevViews) => {
+      if (prevViews.includes(status)) {
+        return prevViews.filter((view) => view !== status);
+      } else {
+        return [...prevViews, status];
+      }
+    });
+  };
+
+  const applyView = () => {
+    handleView(selectedViews);
+    setViewOpen(false);
   };
 
   return (
@@ -33,7 +49,7 @@ const Header = ({ handleSearch, handleFilter, handleView }) => {
       </div>
       {filterOpen && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg z-50 text-white w-96">
+          <div className="filter-container bg-gray-800 p-4 rounded-lg shadow-lg z-50 text-white w-96">
             <h2 className="text-lg font-bold mb-4">Filtrar por:</h2>
             <select
               value={selectedFilter}
@@ -73,10 +89,13 @@ const Header = ({ handleSearch, handleFilter, handleView }) => {
       )}
       {viewOpen && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg z-50 text-white w-96">
+          <div className="view-container bg-gray-800 p-4 rounded-lg shadow-lg z-50 text-white w-96">
             <h2 className="text-lg font-bold mb-4">Opciones de Vista</h2>
-            <button onClick={() => { handleView('list'); toggleView(); }} className="bg-blue-500 p-2 rounded w-full mb-2">Vista de Lista</button>
-            <button onClick={() => { handleView('grid'); toggleView(); }} className="bg-green-500 p-2 rounded w-full">Vista de Cuadrícula</button>
+            <button onClick={() => handleViewChange('En espera')} className={`p-2 rounded w-full mb-2 ${selectedViews.includes('En espera') ? 'bg-blue-700' : 'bg-blue-500'}`}>En espera</button>
+            <button onClick={() => handleViewChange('En proceso')} className={`p-2 rounded w-full mb-2 ${selectedViews.includes('En proceso') ? 'bg-yellow-700' : 'bg-yellow-500'}`}>En proceso</button>
+            <button onClick={() => handleViewChange('Rechazado')} className={`p-2 rounded w-full mb-2 ${selectedViews.includes('Rechazado') ? 'bg-red-700' : 'bg-red-500'}`}>Rechazado</button>
+            <button onClick={() => handleViewChange('Completado')} className={`p-2 rounded w-full ${selectedViews.includes('Completado') ? 'bg-green-700' : 'bg-green-500'}`}>Completado</button>
+            <button onClick={applyView} className="bg-blue-500 p-2 rounded w-full mt-4">Aplicar Vista</button>
             <button onClick={toggleView} className="bg-red-500 p-2 rounded w-full mt-4">Cerrar</button>
           </div>
         </div>
